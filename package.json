@@ -1,0 +1,26 @@
+{
+  "name": "culinary-quiz",
+  "version": "1.0.0",
+  "description": "料理知識測驗",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wendyyuchensun/culinary-quiz.git"
+  },
+  "author": "Wendy Yuchen Sun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wendyyuchensun/culinary-quiz/issues"
+  },
+  "homepage": "https://github.com/wendyyuchensun/culinary-quiz#readme",
+  "devDependencies": {
+    "express": "^4.15.3"
+  },
+  "dependencies": {
+    "sequelize": "^3.30.4",
+    "sqlite3": "^3.1.8"
+  }
+}
