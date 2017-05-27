@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>料理測驗</title>
+    <style>
+      body {
+        margin: 3em
+      }
+    </style>
+  </head>
+  <body>
+    <h1>料理測驗</h1>
+    <button id="beginQuiz" onclick="loadQuizs()">開始</button>
+    <div id="quiz" style="display: none">
+      <h2 id="question"></h2>
+      <p id="answer"></p>
+      <button onclick="loadNextQ()">下一題</button>
+    </div>
+    <script>
+      let quizs, qNo = 1;
+      const beginQ = document.querySelector("#beginQuiz"),
+            quiz = document.querySelector("#quiz"),
+            question = document.querySelector("#question"),
+            answer = document.querySelector("#answer");
+      
+      function loadQuizs () {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            beginQ.style.display = "none";
+            quiz.style.display = "block";
+            quizs = JSON.parse(this.responseText);
+            loadNextQ(quizs[qNo]); 
+          };
+        };
+        xhttp.open("GET", "quizs");
+        xhttp.send();
+      };
+      
+      function loadNextQ () {
+        showQ(quizs[qNo]);
+        qNo++;
+      };
+      
+      function showQ (q) {
+        if (qNo === 1) {
+          let t = document.createTextNode(q.question);
+          question.appendChild(t);
+          t = document.createTextNode(q.answer);
+          answer.appendChild(t);
+        } else {
+          question.childNodes[0].nodeValue = q.question;
+          answer.childNodes[0].nodeValue = q.answer;
+        };
+      };
+    </script>
+  </body>
+</html>
