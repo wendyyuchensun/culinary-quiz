@@ -1,18 +1,20 @@
-module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('quizs', {
-    question: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-    },
-    answer: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+const mongoose = require('mongoose'),
+      Schema = mongoose.Schema;
+
+
+// Quiz schema
+const quizSchema = new Schema({
+  question: {
+    type: String
+  },
+  options: {
+    option: {
+      type: String
     }
-  });  
-};
+  },
+  answer: {
+    type: Number
+  }
+});
+
+module.exports = mongoose.model('quizs', quizSchema);

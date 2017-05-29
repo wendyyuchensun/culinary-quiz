@@ -1,10 +1,16 @@
 const getNow = require("./getNow.js");
 
 module.exports = { 
-  logger: function (req, res, next) {
+  logMsg (msg) {
     const now = getNow();
-    console.log(`${now}  ${req.method} ${req.originalUrl}`);
-    next();
+    console.log(`${now}  ${msg}`);
   },
-  getNow: getNow
+  logger () {
+    // Use arrow function and closure 
+    // so `this` will always be current module 
+    return (req, res, next) => {
+      this.logMsg(`${req.method} ${req.originalUrl}`);
+      next();
+    };
+  }
 };

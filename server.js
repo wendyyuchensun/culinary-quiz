@@ -1,28 +1,44 @@
-const express = require("express"),
+const express = require('express'),
+      // Start server
       app = express(),
       PORT = 3000,
-      middlewares = require("./middlewares/middleware.js"),
-      db = require("./db.js");
+      mongoose = require('mongoose'),
+      middlewares = require('./middlewares/middleware');
 
-app.use(middlewares.logger);
-app.use(express.static(__dirname + "/public"));
+// Connect to DB
+mongoose.connect('mongodb://localhost/culinary-quizs');
+const db = mongoose.connection;
 
-app.get("/quizs", function (req, res) {
-  const id = parseInt(req.params.id);
-  db.quizs.findAll({
-    attributes: ["id", "question", "answer"],
-  }).then(quiz => {
-    if (quiz.length) {
-      res.json(quiz);
+// Check DB connection
+db.once('open', () => {
+  middlewares.logMsg('Connected to DB');
+});
+
+// Check for DB errors
+db.on('error', e => {
+  middlewares.logMsg(e);
+});
+
+// Bring in DB model
+const quizs = require('./models/quizs');
+
+// Middlewares
+app.use(middlewares.logger());
+
+// Static files
+app.use(express.static(__dirname + '/public'));
+
+// Routing
+app.get('/quizs', function (req, res) {
+  quizs.find({}, (e, quizs) => {
+    if (e) {
+      middlewares.logMsg(e);
     } else {
-      res.status(404).send();
+      res.send(quizs);  
     };
   });
 });
 
-db.sequelize.sync().then((db) => {
-  app.listen(PORT, function () {
-    const now = middlewares.getNow();
-    console.log(`${now}  Express server started at PORT ${PORT}`);
-  });
+app.listen(PORT, function () {
+  middlewares.logMsg(`Express server started at PORT ${PORT}`);
 });
